@@ -1,6 +1,6 @@
 #include <iostream> 
 #include <conio.h> 
-#include "GDWMastermind.h"
+#include "GDWMastermindv2.h"
 #include <time.h> 
 #include <windows.h>
 
