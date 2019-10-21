@@ -1,9 +1,11 @@
 #include <iostream> 
 #include <conio.h> 
-#include "GDWMastermind.h"
+#include "Mastermind.h"
 #include <time.h> 
 #include <windows.h>
 
+std::string selection[4] = {};
+std::string verifier[4] = {};
 std::string secretCode[4]; //Array with the Secret code 
 std::string colours[8] = { "Yellow", "Red", "Blue", "Green", "Brown", "Black", "White", "Orange" }; //All the colours 
 std::string titleOptions[2][3] = { { "->", ".", "." }, {"Start", "Help", "Leave"} };
@@ -31,7 +33,7 @@ void ArrowKeyPress() //Checking if the key was pressed
 	while (running) //Moving the arrow 
 	{
 		x = 0;
-		switch ((x = _getch())) 
+		switch ((x = _getch()))
 		{
 		case KEY_UP:
 			if (!(arrowPosition[0] == true)) //So the Arrow can't go off screen up 
@@ -54,7 +56,7 @@ void ArrowKeyPress() //Checking if the key was pressed
 	}
 }
 
-void RightKeyPress(bool &running)
+void RightKeyPress(bool& running)
 {
 	if (arrowPosition[0] == true)
 	{
@@ -128,10 +130,38 @@ void RandomiseColours()
 	}
 }
 
-void StartGame() 
+void checkPosition()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		if (selection[i] == secretCode[i])
+		{
+			verifier[i] = "Red";
+		}
+		else
+		{
+			verifier[i] = "Blank";
+		}
+	}
+}
+
+void checkColour()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			if (selection[i] == secretCode[j] && verifier[i] == "Blank")
+			{
+				verifier[i] = "White";
+			}
+		}
+	}
+}
+
+void StartGame()
 {
 
 
 }
-
 

@@ -5,5 +5,7 @@ void RenderTitle();
 void RandomiseColours();
 void MoveArrow(int);
 void ArrowKeyPress();
-void RightKeyPress(bool &x);
+void RightKeyPress(bool& x);
+void checkPosition();
+void checkColour();
 void StartGame();
