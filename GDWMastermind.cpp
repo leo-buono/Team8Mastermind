@@ -3,6 +3,7 @@
 #include "GDWMastermind.h"
 #include <time.h> 
 #include <windows.h>
+#include "Game.h"
 
 std::string secretCode[4]; //Array with the Secret code 
 std::string colours[8] = { "Yellow", "Red", "Blue", "Green", "Brown", "Black", "White", "Orange" }; //All the colours 
@@ -36,13 +37,15 @@ void ArrowKeyPress() //Checking if the key was pressed
 		case KEY_UP:
 			if (!(arrowPosition[0] == true)) //So the Arrow can't go off screen up 
 			{
-				MoveArrow(-1);
+				MoveArrowTitle(-1, 3, arrowPosition);
+				RenderTitle();
 			}
 			break;
 		case KEY_DOWN:
 			if (!(arrowPosition[2] == true)) //so the Arrow cant go offscreen down 
 			{
-				MoveArrow(1);
+				MoveArrowTitle(1, 3, arrowPosition);
+				RenderTitle();
 			}
 			break;
 		case KEY_RIGHT:
@@ -70,13 +73,13 @@ void RightKeyPress(bool &running)
 	}
 }
 
-void MoveArrow(int positiveNegative)
+void MoveArrowTitle(int positiveNegative, int sizeOfArray, bool arrowPosition[])
 {
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < sizeOfArray; i++)
 	{
 		if (arrowPosition[i])
 		{
-			for (int k = 0; k < 3; k++)
+			for (int k = 0; k < sizeOfArray; k++)
 			{
 				titleOptions[0][k] = ".";
 			}
@@ -84,11 +87,12 @@ void MoveArrow(int positiveNegative)
 			std::cout << "\n";
 			arrowPosition[i] = false;
 			arrowPosition[i + positiveNegative] = true;
-			RenderTitle();
 			break;
 		}
 	}
 }
+
+
 
 void RenderTitle()
 {
@@ -128,10 +132,9 @@ void RandomiseColours()
 	}
 }
 
-void StartGame() 
+void StartGame()
 {
-
-
+	game();
 }
 
 
