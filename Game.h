@@ -1,5 +1,10 @@
 #pragma once
-void game();
+
+void checkPosition();
+
+void checkColour();
+
+void game(std::string a[4]);
 
 void ButtonDownRight();
 
@@ -10,3 +15,4 @@ void ButtonDownLeft();
 void PrintBoard();
 
 void MoveArrowColour(int positiveNegative, int sizeOfArray, bool arrowPosition[], std::string a[2][8]);
+
