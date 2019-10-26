@@ -9,14 +9,16 @@
 #define KEY_RIGHT 77 
 
 
-std::string secretCodeCopy[4];
+secretCode colourCode;
+
 std::string colourMenu[2][8] = { {"->", ".",".",".",".",".",".","."},  { "Yellow", "Red", "Blue", "Green", "Brown", "Black", "White", "Orange"} };
 std::string guess[5] = { "*", "_","_","_", "" };
-std::string selection[4] = {};
-std::string verifier[4] = {};
+std::string prevGuess[4];
+int correctColour = 0;
+int correctSpot = 0;
+int guessCount = 1;
 bool isContinue = false; // is for to check for if the arrow should be over the continue string and shouldn't allow for any up or down movement
 bool selectedOptionColour[8] = { true, false, false, false, false, false, false, false };
-
 
 
 void game(std::string copy[4]) 
@@ -24,7 +26,8 @@ void game(std::string copy[4])
 	//porting the secret code to this cpp
 	for (int i = 0; i < 4; i++)
 	{
-		secretCodeCopy[i] = copy[i];
+		colourCode.staticAnswer[i] = copy[i];
+		colourCode.copyAnswer[i] = copy[i];
 	}
 
 	system("cls");
@@ -59,16 +62,29 @@ void ArrowSelection(bool  selectedOptionColour[8], std::string  guess[4], std::s
 			break;									
 		case KEY_RIGHT:								
 			ButtonDownRight();						
-			PrintBoard();							
+			PrintBoard();
+			CheckWin();
 			break;									
 		case KEY_LEFT:								
 			ButtonDownLeft();						
-			PrintBoard();							
+			PrintBoard();
 			break;									
 		default:
 			break;
 		}
 
+	}
+}
+void CheckWin()
+{
+	if (correctColour == 4)
+	{
+		system("cls");
+		std::cout << "Winner!!\n";
+		std::cout << "Press Any Key to return to the main menu";
+
+		std::cin.ignore();
+		MainMenu();
 	}
 }
 void PrintBoard()
@@ -87,6 +103,17 @@ void PrintBoard()
 		std::cout << colourMenu[0][i] << colourMenu[1][i];
 		std::cout << "\n";
 
+	}
+	
+	if (guessCount > 1)
+	{
+		std::cout << "There are " << correctColour << " In the correct spot and colour\n";
+		std::cout << "There are " << correctSpot << " In the correct colour but wrong spot\n";
+		std::cout << "Previous Guess ";
+		for (int i = 0; i < 4; i++)
+		{
+			std::cout << prevGuess[i] << "\t";
+		}
 	}
 }
 void MoveArrowColour(int positiveNegative, int sizeOfArray, bool arrowPosition[], std::string option[2][8]) 
@@ -110,40 +137,60 @@ void MoveArrowColour(int positiveNegative, int sizeOfArray, bool arrowPosition[]
 }
 void ButtonDownRight()
 {
-	if (isContinue)
+	if (isContinue) //if the continue prompt is up then verify the code
 	{
-		//if the continue prompt is up then verify the code
-		checkColour();
-		checkPosition();
-	}
-	//loop to add the selected 
-	for (int i = 0; i < 8; i++)
-	{
-		if (selectedOptionColour[i])
+		correctColour = 0;
+		correctSpot = 0;
+		for (int i = 0; i < 4; i++)
 		{
-			for (int k = 0; k < 4; k++)
+			prevGuess[i] = guess[i];
+		}
+		for (int i = 0; i < 4; i++)
+		{
+			colourCode.copyAnswer[i] = colourCode.staticAnswer[i];
+		}
+		checkPosition();
+		checkColour();
+		guess[0] = "*";
+		for (int i = 1; i < 4; i++)
+		{
+			guess[i] = "_";
+		}
+		guess[4] = "";
+		guessCount++;
+		isContinue = false;
+	}
+	else 
+	{
+		//loop to add the selected 
+		for (int i = 0; i < 8; i++)
+		{
+			if (selectedOptionColour[i])
 			{
-				if (guess[k] == "*")
+				for (int k = 0; k < 4; k++)
 				{
-					if (k != 3)
+					if (guess[k] == "*")
 					{
-						guess[k + 1] = "*";
-					}
-					else
-					{
-						guess[k + 1] = "->Confirm?";
-						isContinue = true;
-						for (int k = 0; k < 8; k++)
+						if (k != 3)
 						{
-							colourMenu[0][k] = ".";
+							guess[k + 1] = "*";
 						}
+						else
+						{
+							guess[k + 1] = "->Confirm?";
+							isContinue = true;
+							for (int k = 0; k < 8; k++)
+							{
+								colourMenu[0][k] = ".";
+							}
+						}
+						guess[k] = colourMenu[1][i];
+						break;
 					}
-					guess[k] = colourMenu[1][i];
-					break;
-				}
 
+				}
+				break;
 			}
-			break;
 		}
 	}
 
@@ -179,32 +226,36 @@ void ButtonDownLeft()  //Left button press to remove the text and put a * and _
 		}
 	}
 }
-void checkPosition()
+void checkPosition() //checks if correct position and colour
 {
 	for (int i = 0; i < 4; i++)
 	{
-		if (guess[i] == secretCodeCopy[i])
+		if (guess[i] == colourCode.copyAnswer[i])
 		{
-			verifier[i] = "Red";
-		}
-		else
-		{
-			verifier[i] = "Empty";
+
+			correctColour++;
+			colourCode.copyAnswer[i] = "";
 		}
 	}
 }
 
-void checkColour()
+void checkColour() //checks if correct colour but wrong position
 {
 	for (int i = 0; i < 4; i++)
 	{
 		for (int j = 0; j < 4; j++)
 		{
-			if (guess[i] == secretCodeCopy[j] && verifier[i] == "Blank")
+			if (guess[i] == colourCode.copyAnswer[j])
 			{
-				verifier[i] = "White";
+				correctSpot++;
+				colourCode.copyAnswer[j] = "";
+				break;
 			}
 		}
+	}
+	if (correctSpot > correctColour)
+	{
+		correctSpot -= correctColour;
 	}
 }
 
