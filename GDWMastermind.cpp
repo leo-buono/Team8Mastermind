@@ -54,7 +54,7 @@ void ArrowKeyPress() //Checking if the key was pressed
 			}
 			break;
 		case KEY_RIGHT:
-			RightKeyPress(running);
+			RightKeyPress();
 			break;
 		default:
 			break;
@@ -62,7 +62,7 @@ void ArrowKeyPress() //Checking if the key was pressed
 	}
 }
 
-void RightKeyPress(bool &running)
+void RightKeyPress()
 {
 	if (arrowPosition[0] == true)
 	{
@@ -74,7 +74,7 @@ void RightKeyPress(bool &running)
 	}
 	else if (arrowPosition[2] == true)
 	{
-		running = false;  //passing running by reference to end the loop if the user put Leave as the op
+		std::exit(0);
 	}
 }
 
