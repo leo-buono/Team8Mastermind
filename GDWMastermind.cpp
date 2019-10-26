@@ -18,11 +18,16 @@ bool arrowPosition[3] = { true, false, false };
 
 int main()
 {
+	MainMenu();
+	return 0; //Ends the program By returning zero to main 
+}
+
+void MainMenu()
+{
 	RandomiseColours(); //Function to randomise the colours 
 	RenderTitle(); //Renders the Ascii Art Title 
 	ArrowKeyPress();
 	std::cout << "end";
-	return 0; //Ends the program By returning zero to main 
 }
 
 void ArrowKeyPress() //Checking if the key was pressed 
@@ -113,7 +118,7 @@ void RenderTitle()
 		std::cout << title[i] << "\n";
 	}
 	SetConsoleTextAttribute(colour, 15); //change colour to white for the rest of the text
-	std::cout << "\n\n\t\t\t Select An option" << "\n";
+	std::cout << "\n\n Select An option (Using the Arrow keys and press right arrow to select)" << "\n";
 	for (int i = 0; i < 3; i++)
 	{
 		std::cout << titleOptions[0][i] << titleOptions[1][i];
@@ -134,7 +139,7 @@ void RandomiseColours()
 
 void StartGame()
 {
-	game();
+	game(secretCode);
 }
 
 
