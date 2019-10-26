@@ -1,13 +1,12 @@
 #include <iostream> 
 #include <conio.h> 
-#include "Mastermind.h"
+#include "GDWMastermind.h"
 #include <time.h> 
 #include <windows.h>
+#include "Game.h"
 
-std::string selection[4] = {};
-std::string verifier[4] = {};
 std::string secretCode[4]; //Array with the Secret code 
-std::string colours[8] = { "Yellow", "Red", "Blue", "Green", "Brown", "Black", "White", "Orange" }; //All the colours 
+//std::string colours[8] = { "Yellow", "Red", "Blue", "Green", "Brown", "Black", "White", "Orange" }; //All the colours 
 std::string titleOptions[2][3] = { { "->", ".", "." }, {"Start", "Help", "Leave"} };
 bool arrowPosition[3] = { true, false, false };
 //Colours are Yellow, Red, Blue, Green, Brown, Black, Gray/White,  
@@ -19,7 +18,7 @@ bool arrowPosition[3] = { true, false, false };
 
 int main()
 {
-	RandomiseColours(); //Function to randomise the colours 
+	//RandomiseColours(); //Function to randomise the colours 
 	RenderTitle(); //Renders the Ascii Art Title 
 	ArrowKeyPress();
 	std::cout << "end";
@@ -38,13 +37,15 @@ void ArrowKeyPress() //Checking if the key was pressed
 		case KEY_UP:
 			if (!(arrowPosition[0] == true)) //So the Arrow can't go off screen up 
 			{
-				MoveArrow(-1);
+				MoveArrowTitle(-1, 3, arrowPosition);
+				RenderTitle();
 			}
 			break;
 		case KEY_DOWN:
 			if (!(arrowPosition[2] == true)) //so the Arrow cant go offscreen down 
 			{
-				MoveArrow(1);
+				MoveArrowTitle(1, 3, arrowPosition);
+				RenderTitle();
 			}
 			break;
 		case KEY_RIGHT:
@@ -72,13 +73,13 @@ void RightKeyPress(bool& running)
 	}
 }
 
-void MoveArrow(int positiveNegative)
+void MoveArrowTitle(int positiveNegative, int sizeOfArray, bool arrowPosition[])
 {
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < sizeOfArray; i++)
 	{
 		if (arrowPosition[i])
 		{
-			for (int k = 0; k < 3; k++)
+			for (int k = 0; k < sizeOfArray; k++)
 			{
 				titleOptions[0][k] = ".";
 			}
@@ -86,11 +87,12 @@ void MoveArrow(int positiveNegative)
 			std::cout << "\n";
 			arrowPosition[i] = false;
 			arrowPosition[i + positiveNegative] = true;
-			RenderTitle();
 			break;
 		}
 	}
 }
+
+
 
 void RenderTitle()
 {
@@ -120,7 +122,7 @@ void RenderTitle()
 	}
 }
 
-void RandomiseColours()
+/*void RandomiseColours()
 {
 	srand(time(0));
 	for (int i = 0; i < 4; i++) //four being the length of the secret code 
@@ -128,40 +130,9 @@ void RandomiseColours()
 		int randomNum = std::rand() % 8; //Eight colours 
 		secretCode[i] = colours[randomNum];
 	}
-}
-
-void checkPosition()
-{
-	for (int i = 0; i < 4; i++)
-	{
-		if (selection[i] == secretCode[i])
-		{
-			verifier[i] = "Red";
-		}
-		else
-		{
-			verifier[i] = "Blank";
-		}
-	}
-}
-
-void checkColour()
-{
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			if (selection[i] == secretCode[j] && verifier[i] == "Blank")
-			{
-				verifier[i] = "White";
-			}
-		}
-	}
-}
+}*/
 
 void StartGame()
 {
-
-
+	game();
 }
-

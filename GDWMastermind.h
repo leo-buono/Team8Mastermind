@@ -1,11 +1,8 @@
 #pragma once
 
-
 void RenderTitle();
-void RandomiseColours();
-void MoveArrow(int);
+//void RandomiseColours();
+void MoveArrowTitle(int, int sizeOfArray, bool a[]);
 void ArrowKeyPress();
 void RightKeyPress(bool& x);
-void checkPosition();
-void checkColour();
 void StartGame();
