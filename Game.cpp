@@ -13,16 +13,26 @@ secretCode colourCode;
 
 std::string colourMenu[2][8] = { {"->", ".",".",".",".",".",".","."},  { "Yellow", "Red", "Blue", "Green", "Brown", "Black", "White", "Orange"} };
 std::string guess[5] = { "*", "_","_","_", "" };
-std::string prevGuess[4];
+std::string prevGuess[12][4];
 int correctColour = 0;
 int correctSpot = 0;
-int guessCount = 1;
+int guessCount = 0;
 bool isContinue = false; // is for to check for if the arrow should be over the continue string and shouldn't allow for any up or down movement
 bool selectedOptionColour[8] = { true, false, false, false, false, false, false, false };
 
 
 void game(std::string copy[4]) 
 {
+	//Resets all of the variables to 0 if the palyer plays and then resets 
+	guessCount = 0;
+	for (int i = 0; i < 12; i++)
+	{
+		for (int k = 0; k < 4; k++)
+		{
+			prevGuess[i][k] = "";
+		}
+	}
+
 	//porting the secret code to this cpp
 	for (int i = 0; i < 4; i++)
 	{
@@ -60,7 +70,11 @@ void ArrowSelection(bool  selectedOptionColour[8], std::string  guess[4], std::s
 				PrintBoard();
 			}
 			break;									
-		case KEY_RIGHT:								
+		case KEY_RIGHT:		
+			if (guessCount == 12) //If the player loses
+			{
+				CheckLose();
+			}
 			ButtonDownRight();						
 			PrintBoard();
 			CheckWin();
@@ -75,13 +89,25 @@ void ArrowSelection(bool  selectedOptionColour[8], std::string  guess[4], std::s
 
 	}
 }
+void CheckLose() 
+{
+	if (guessCount == 12)
+	{
+		system("cls");
+		std::cout << "You Lose!\n";
+		std::cout << "Press Enter to return to the main menu";
+
+		std::cin.ignore();
+		MainMenu();
+	}
+}
 void CheckWin()
 {
 	if (correctColour == 4)
 	{
 		system("cls");
 		std::cout << "Winner!!\n";
-		std::cout << "Press Any Key to return to the main menu";
+		std::cout << "Press Enter to return to the main menu";
 
 		std::cin.ignore();
 		MainMenu();
@@ -102,17 +128,20 @@ void PrintBoard()
 	{
 		std::cout << colourMenu[0][i] << colourMenu[1][i];
 		std::cout << "\n";
-
 	}
 	
-	if (guessCount > 1)
+	if (guessCount > 0)
 	{
 		std::cout << "There are " << correctColour << " In the correct spot and colour\n";
 		std::cout << "There are " << correctSpot << " In the correct colour but wrong spot\n";
-		std::cout << "Previous Guess ";
-		for (int i = 0; i < 4; i++)
+		std::cout << "Previous Guess(es) \n";
+		for (int i = guessCount - 1; i >= 0; i--) //Prints out the Guesses in order of previous guess on the top
 		{
-			std::cout << prevGuess[i] << "\t";
+			for (int k = 0; k < 4; k++)
+			{
+				std::cout << " " << prevGuess[i][k] << "\t";
+			}
+			std::cout << "\n";
 		}
 	}
 }
@@ -143,7 +172,7 @@ void ButtonDownRight()
 		correctSpot = 0;
 		for (int i = 0; i < 4; i++)
 		{
-			prevGuess[i] = guess[i];
+			prevGuess[guessCount][i] = guess[i];
 		}
 		for (int i = 0; i < 4; i++)
 		{
@@ -157,8 +186,8 @@ void ButtonDownRight()
 			guess[i] = "_";
 		}
 		guess[4] = "";
-		guessCount++;
 		isContinue = false;
+		guessCount++;
 	}
 	else 
 	{

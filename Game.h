@@ -23,3 +23,5 @@ void ButtonDownLeft();
 void PrintBoard();
 
 void MoveArrowColour(int positiveNegative, int sizeOfArray, bool arrowPosition[], std::string a[2][8]);
+
+void CheckLose();
